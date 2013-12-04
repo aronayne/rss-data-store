@@ -1,4 +1,4 @@
-package com.example;
+package com.controllers;
 
 import java.sql.SQLException;
 
@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.config.DatabaseConfig;
+
 @Controller
 @RequestMapping("getResponse")
-public class PersonController {
+public class ContentStoreController {
 
 	/*
 	 * @Autowired private PersonService personService;
@@ -20,9 +22,8 @@ public class PersonController {
 	@RequestMapping(value = "/addToDatabase", method = RequestMethod.GET)
 	@ResponseBody
 	public String addToDatabase() throws SQLException {
-		
-	
-		ApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
+
+		ApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
 		BasicDataSource basicDataSource = context.getBean(BasicDataSource.class);
 
 		basicDataSource.getConnection().createStatement().execute("INSERT INTO heroku_fca06dcb390cb0f.`rss-data` (feedType , description) VALUES (\"test\" , \"test\")");
@@ -30,27 +31,4 @@ public class PersonController {
 		return "Record Inserted";
 	}
 
-	/*
-	 * @RequestMapping("/") public String listPeople(Map<String, Object> map) {
-	 * 
-	 * map.put("person", new Person()); map.put("peopleList",
-	 * personService.listPeople());
-	 * 
-	 * return "people"; }
-	 * 
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-	 * String addPerson(@ModelAttribute("person") Person person, BindingResult
-	 * result) {
-	 * 
-	 * personService.addPerson(person);
-	 * 
-	 * return "redirect:/people/"; }
-	 * 
-	 * @RequestMapping("/delete/{personId}") public String
-	 * deletePerson(@PathVariable("personId") Integer personId) {
-	 * 
-	 * personService.removePerson(personId);
-	 * 
-	 * return "redirect:/people/"; }
-	 */
 }

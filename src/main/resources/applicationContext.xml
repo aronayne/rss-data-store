@@ -12,7 +12,7 @@
                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:annotation-config />
-    <context:component-scan base-package="com.example" />
+    <context:component-scan base-package="com.controllers" />
     
     <mvc:annotation-driven/>
 
@@ -20,14 +20,7 @@
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
-    </bean>
-
-    <tx:annotation-driven />
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-        <property name="dataSource" ref="dataSource"/>
-
-    </bean>
+    </bean> 
 
     <beans profile="default">
         <jdbc:embedded-database id="dataSource"/>        
@@ -71,5 +64,5 @@
             </property>
         </bean>
     </beans>
-
+    
 </beans>
