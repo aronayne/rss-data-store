@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.config.DatabaseConfig;
 
+
 @Controller
 @RequestMapping("getResponse")
 public class ContentStoreController {
@@ -28,7 +29,13 @@ public class ContentStoreController {
 
 		basicDataSource.getConnection().createStatement().execute("INSERT INTO heroku_fca06dcb390cb0f.`rss-data` (feedType , description) VALUES (\"test\" , \"test\")");
 		
-		return "Record Inserted";
+		java.sql.ResultSet rs = basicDataSource.getConnection().createStatement().executeQuery("SELECT COUNT(*) from heroku_fca06dcb390cb0f.`rss-data`");
+		int totalRecords = 0;
+		while(rs.next()){
+			totalRecords = rs.getInt(1);
+		}
+		
+		return "Record Inserted"+totalRecords;
 	}
 
 }
