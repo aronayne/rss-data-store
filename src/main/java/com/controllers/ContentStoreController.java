@@ -1,6 +1,8 @@
 package com.controllers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.ApplicationContext;
@@ -27,13 +29,16 @@ public class ContentStoreController {
 		ApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
 		BasicDataSource basicDataSource = context.getBean(BasicDataSource.class);
 
-		basicDataSource.getConnection().createStatement().execute("INSERT INTO heroku_fca06dcb390cb0f.`rss-data` (feedType , description) VALUES (\"test\" , \"test\")");
-		
-		java.sql.ResultSet rs = basicDataSource.getConnection().createStatement().executeQuery("SELECT COUNT(*) from heroku_fca06dcb390cb0f.`rss-data`");
+		Connection connection = basicDataSource.getConnection();
+		Statement stmt = connection.createStatement();
+		stmt.execute("INSERT INTO heroku_fca06dcb390cb0f.`rss-data` (feedType , description) VALUES (\"test\" , \"test\")");
+		java.sql.ResultSet rs = connection.createStatement().executeQuery("SELECT COUNT(*) from heroku_fca06dcb390cb0f.`rss-data`");
 		int totalRecords = 0;
 		while(rs.next()){
 			totalRecords = rs.getInt(1);
 		}
+		stmt.close();
+		connection.close();
 		
 		return "Record Inserted"+totalRecords;
 	}
