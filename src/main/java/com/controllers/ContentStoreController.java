@@ -15,9 +15,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.config.DatabaseConfig;
 
 
+
+
 @Controller
 @RequestMapping("getResponse")
 public class ContentStoreController {
+
+	private static Connection connection;
+	
+	static {
+		
+		ApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
+		BasicDataSource basicDataSource = context.getBean(BasicDataSource.class);
+		try {
+			connection = basicDataSource.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/*
 	 * @Autowired private PersonService personService;
@@ -26,19 +42,18 @@ public class ContentStoreController {
 	@ResponseBody
 	public String addToDatabase() throws SQLException {
 
-		ApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
-		BasicDataSource basicDataSource = context.getBean(BasicDataSource.class);
 
-		Connection connection = basicDataSource.getConnection();
+
+		//Connection connection = basicDataSource.getConnection();
 		Statement stmt = connection.createStatement();
 		stmt.execute("INSERT INTO heroku_fca06dcb390cb0f.`rss-data` (feedType , description) VALUES (\"test\" , \"test\")");
-		java.sql.ResultSet rs = connection.createStatement().executeQuery("SELECT COUNT(*) from heroku_fca06dcb390cb0f.`rss-data`");
+		java.sql.ResultSet rs = stmt.executeQuery("SELECT COUNT(*) from heroku_fca06dcb390cb0f.`rss-data`");
 		int totalRecords = 0;
 		while(rs.next()){
 			totalRecords = rs.getInt(1);
 		}
 		stmt.close();
-		connection.close();
+		//connection.close();
 		
 		return "Record Inserted"+totalRecords;
 	}
